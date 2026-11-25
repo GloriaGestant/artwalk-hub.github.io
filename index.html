@@ -1059,18 +1059,10 @@
 
         const MAX_INTERACTION_DISTANCE = 3.5;
 
-        function onCanvasClick(event) {
-            let clientX, clientY;
-            if (event.touches) {
-                clientX = event.touches[0].clientX;
-                clientY = event.touches[0].clientY;
-            } else {
-                clientX = event.clientX;
-                clientY = event.clientY;
-            }
-
-            mouse.x = (clientX / renderer.domElement.clientWidth) * 2 - 1;
-            mouse.y = -(clientY / renderer.domElement.clientHeight) * 2 + 1;
+        function handleInteraction(clientX, clientY) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
 
@@ -1092,7 +1084,31 @@
             }
         }
 
-        renderer.domElement.addEventListener('click', onCanvasClick);
+        // --- Тап/клик по холсту (работает и на десктопе, и на мобильных) ---
+        let pointerDownTime = 0;
+        let pointerDownX = 0;
+        let pointerDownY = 0;
+        const TAP_MAX_DURATION = 300;   // мс
+        const TAP_MAX_MOVE = 10;        // пикселей
+
+        renderer.domElement.addEventListener('pointerdown', (e) => {
+            if (e.isPrimary === false) return;
+            pointerDownTime = performance.now();
+            pointerDownX = e.clientX;
+            pointerDownY = e.clientY;
+        });
+
+        renderer.domElement.addEventListener('pointerup', (e) => {
+            if (e.isPrimary === false) return;
+            const dt = performance.now() - pointerDownTime;
+            const dx = e.clientX - pointerDownX;
+            const dy = e.clientY - pointerDownY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dt < TAP_MAX_DURATION && dist < TAP_MAX_MOVE) {
+                handleInteraction(e.clientX, e.clientY);
+            }
+        });
 
         // --- Панель информации ---
         const infoPanel = document.getElementById('info-panel');
