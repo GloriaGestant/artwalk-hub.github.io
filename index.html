@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>3D Галерея — Диваны спиной к спине</title>
+    <title>3D Галерея — Исторические усадьбы Крыма</title>
     <style>
         body {
             margin: 0;
@@ -365,37 +365,29 @@
 
         const wallMat = new THREE.MeshStandardMaterial({ color: 0x8a4a3a, roughness: 0.85, metalness: 0.05 });
 
-        // ==========================================
-        // ЗАДНЯЯ СТЕНА (сплошная, с картинами)
-        // ==========================================
+        // --- Стены ---
         const backWall = new THREE.Mesh(new THREE.BoxGeometry(roomWidth, roomHeight, 0.2), wallMat);
         backWall.position.set(0, roomHeight/2, -roomDepth/2);
         backWall.receiveShadow = true;
         backWall.castShadow = true;
         scene.add(backWall);
 
-        // ==========================================
-        // ПЕРЕДНЯЯ СТЕНА (составная, с дверью)
-        // ==========================================
         const doorWidth = 1.2;
         const doorHeight = 2.4;
         const wallThickness = 0.2;
 
-        // Левая часть передней стены
         const frontWallLeft = new THREE.Mesh(new THREE.BoxGeometry((roomWidth - doorWidth) / 2, roomHeight, wallThickness), wallMat);
         frontWallLeft.position.set(-(doorWidth / 2) - (roomWidth - doorWidth) / 4, roomHeight / 2, roomDepth / 2);
         frontWallLeft.receiveShadow = true;
         frontWallLeft.castShadow = true;
         scene.add(frontWallLeft);
 
-        // Правая часть передней стены
         const frontWallRight = new THREE.Mesh(new THREE.BoxGeometry((roomWidth - doorWidth) / 2, roomHeight, wallThickness), wallMat);
         frontWallRight.position.set((doorWidth / 2) + (roomWidth - doorWidth) / 4, roomHeight / 2, roomDepth / 2);
         frontWallRight.receiveShadow = true;
         frontWallRight.castShadow = true;
         scene.add(frontWallRight);
 
-        // Верхняя часть над дверью
         const frontWallTop = new THREE.Mesh(new THREE.BoxGeometry(doorWidth, roomHeight - doorHeight, wallThickness), wallMat);
         frontWallTop.position.set(0, doorHeight + (roomHeight - doorHeight) / 2, roomDepth / 2);
         frontWallTop.receiveShadow = true;
@@ -414,47 +406,21 @@
         rightWall.castShadow = true;
         scene.add(rightWall);
 
-        // --- ДВЕРЬ (На передней стене) ---
+        // --- ДВЕРЬ ---
         const doorGroup = new THREE.Group();
         const doorMat = new THREE.MeshStandardMaterial({ color: 0x3a2010, roughness: 0.6, metalness: 0.1 });
-        const doorPanelMat = new THREE.MeshStandardMaterial({ color: 0x2a1508, roughness: 0.7 });
         const doorHandleMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.2, metalness: 0.8 });
-
-        // Полотно двери (смотрит внутрь комнаты)
         const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(doorWidth - 0.06, doorHeight - 0.06, 0.06), doorMat);
         doorMesh.position.set(0, doorHeight / 2, roomDepth / 2 - 0.02);
         doorMesh.castShadow = true;
         doorMesh.receiveShadow = true;
         doorGroup.add(doorMesh);
 
-        // Декоративные панели на двери
-        const panel1 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.8, 0.02), doorPanelMat);
-        panel1.position.set(-0.25, 1.6, roomDepth / 2 - 0.05);
-        panel1.castShadow = true;
-        doorGroup.add(panel1);
-
-        const panel2 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.8, 0.02), doorPanelMat);
-        panel2.position.set(0.25, 1.6, roomDepth / 2 - 0.05);
-        panel2.castShadow = true;
-        doorGroup.add(panel2);
-
-        const panel3 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.8, 0.02), doorPanelMat);
-        panel3.position.set(-0.25, 0.6, roomDepth / 2 - 0.05);
-        panel3.castShadow = true;
-        doorGroup.add(panel3);
-
-        const panel4 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.8, 0.02), doorPanelMat);
-        panel4.position.set(0.25, 0.6, roomDepth / 2 - 0.05);
-        panel4.castShadow = true;
-        doorGroup.add(panel4);
-
-        // Ручка двери
         const handle = new THREE.Mesh(new THREE.SphereGeometry(0.04, 16, 16), doorHandleMat);
         handle.position.set(0.5, 1.0, roomDepth / 2 - 0.08);
         handle.castShadow = true;
         doorGroup.add(handle);
 
-        // Наличники
         const jambMat = new THREE.MeshStandardMaterial({ color: 0x2a1508, roughness: 0.5 });
         const leftJamb = new THREE.Mesh(new THREE.BoxGeometry(0.08, doorHeight, 0.1), jambMat);
         leftJamb.position.set(-doorWidth / 2 - 0.04, doorHeight / 2, roomDepth / 2 - 0.02);
@@ -470,7 +436,6 @@
         topJamb.position.set(0, doorHeight + 0.04, roomDepth / 2 - 0.02);
         topJamb.castShadow = true;
         doorGroup.add(topJamb);
-
         scene.add(doorGroup);
 
         // Плинтусы
@@ -478,12 +443,10 @@
         const skirtingHeight = 0.15;
         const skirtingDepth = 0.08;
 
-        // Плинтус на задней стене (сплошной)
         const skBack = new THREE.Mesh(new THREE.BoxGeometry(roomWidth, skirtingHeight, skirtingDepth), skirtingMat);
         skBack.position.set(0, skirtingHeight/2, -roomDepth/2 + 0.1);
         scene.add(skBack);
 
-        // Плинтус на передней стене (с разрывом под дверь)
         const skFrontLeft = new THREE.Mesh(new THREE.BoxGeometry((roomWidth - doorWidth) / 2, skirtingHeight, skirtingDepth), skirtingMat);
         skFrontLeft.position.set(-(doorWidth / 2) - (roomWidth - doorWidth) / 4, skirtingHeight / 2, roomDepth / 2 - 0.1);
         scene.add(skFrontLeft);
@@ -499,55 +462,85 @@
         skRight.position.set(roomWidth/2 - 0.1, skirtingHeight/2, 0);
         scene.add(skRight);
 
-        // --- Картины ---
-        function createPaintingTexture(bgColor, accentColor, title) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 320;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(0, 0, 256, 320);
-            for (let i = 0; i < 30; i++) {
-                ctx.fillStyle = `rgba(${Math.random()*255|0}, ${Math.random()*200|0}, ${Math.random()*150|0}, 0.15)`;
-                ctx.fillRect(Math.random()*256, Math.random()*320, Math.random()*60+10, Math.random()*40+5);
-            }
-            ctx.strokeStyle = accentColor;
-            ctx.lineWidth = 8;
-            ctx.strokeRect(10, 10, 236, 300);
-            ctx.fillStyle = accentColor;
-            ctx.font = 'bold 22px "Segoe UI", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(title, 128, 160);
-            return new THREE.CanvasTexture(canvas);
-        }
-
+        // ==========================================
+        // --- КАРТИНЫ (ВСТАВЬТЕ СЮДА ВАШИ BASE64 СТРОКИ) ---
+        // ==========================================
         const paintingData = [
-            { title: 'Пейзаж', desc: 'Неизвестный художник, XIX век. Тёплый вечерний свет.', pos: [-2.5, 2.0, -roomDepth/2 + 0.12], rotY: 0, w: 1.2, h: 1.5, bg: '#3a4a2a', fg: '#c0a060' },
-            { title: 'Портрет', desc: 'Старинный портрет в золочёной раме.', pos: [0, 2.0, -roomDepth/2 + 0.12], rotY: 0, w: 1.4, h: 1.8, bg: '#2a2a3a', fg: '#d0a050' },
-            { title: 'Натюрморт', desc: 'Цветы и фрукты на столе.', pos: [2.5, 2.0, -roomDepth/2 + 0.12], rotY: 0, w: 1.2, h: 1.5, bg: '#4a2a2a', fg: '#e0b060' },
-            { title: 'Море', desc: 'Бурное море, романтизм.', pos: [roomWidth/2 - 0.12, 2.2, -3], rotY: -Math.PI/2, w: 1.6, h: 1.2, bg: '#2a3a4a', fg: '#a0c0d0' },
-            { title: 'Лес', desc: 'Тёмный лес, мистика.', pos: [roomWidth/2 - 0.12, 1.8, -0.5], rotY: -Math.PI/2, w: 1.0, h: 1.4, bg: '#1a3a1a', fg: '#80a060' },
-            { title: 'Город', desc: 'Старый город на закате.', pos: [roomWidth/2 - 0.12, 2.0, 2], rotY: -Math.PI/2, w: 1.4, h: 1.0, bg: '#4a3a2a', fg: '#e0a060' },
-            { title: 'Абстракция', desc: 'Современное искусство.', pos: [roomWidth/2 - 0.12, 1.6, 4], rotY: -Math.PI/2, w: 0.9, h: 1.2, bg: '#3a2a4a', fg: '#c080d0' },
-            { title: 'Зима', desc: 'Зимний пейзаж, снег.', pos: [-roomWidth/2 + 0.12, 2.2, -3], rotY: Math.PI/2, w: 1.5, h: 1.1, bg: '#3a4a5a', fg: '#c0d0e0' },
-            { title: 'Цветы', desc: 'Яркий букет в вазе.', pos: [-roomWidth/2 + 0.12, 1.7, -0.5], rotY: Math.PI/2, w: 1.1, h: 1.3, bg: '#4a2a3a', fg: '#e080a0' },
-            { title: 'Портрет дамы', desc: 'Элегантный портрет.', pos: [-roomWidth/2 + 0.12, 2.0, 2], rotY: Math.PI/2, w: 1.3, h: 1.6, bg: '#2a2a2a', fg: '#d0b080' },
-            { title: 'Пейзаж с рекой', desc: 'Спокойная река.', pos: [-roomWidth/2 + 0.12, 1.8, 4], rotY: Math.PI/2, w: 1.4, h: 1.0, bg: '#2a4a3a', fg: '#80c0a0' },
-            { title: 'Абстракция 2', desc: 'Геометрическая композиция.', pos: [-2.5, 2.0, roomDepth/2 - 0.12], rotY: Math.PI, w: 1.0, h: 1.2, bg: '#3a3a3a', fg: '#e0e0a0' },
-            { title: 'Пейзаж 2', desc: 'Горный пейзаж.', pos: [2.5, 2.0, roomDepth/2 - 0.12], rotY: Math.PI, w: 1.3, h: 1.1, bg: '#2a3a2a', fg: '#a0c080' }
+            {
+                title: 'Дом купца',
+                desc: 'Фотография. Дом купца, мецената и общественного деятеля Дмитрия Ильича Пачаджи, Бахчисарайский район, 1908 г.',
+                image: 'https://raw.githubusercontent.com/GloriaGestant/artwalk-hub.github.io/main/dom-kupca.jpg',
+                pos: [-1.5, 1.8, -roomDepth/2 + 0.12],
+                rotY: 0,
+                w: 2.2,
+                h: 1.4
+            },
+            {
+                title: 'Усадьба Шатилова',
+                desc: 'Фотография. Усадьба общественного деятеля, селекционера Иосифа Николаевича Шатилова, Нижнегорский район, 1888 г.',
+                image: 'https://raw.githubusercontent.com/GloriaGestant/artwalk-hub.github.io/main/usadba-shatilova.jpg',
+                pos: [1.5, 1.8, -roomDepth/2 + 0.12],
+                rotY: 0,
+                w: 2.2,
+                h: 1.4
+            },
+            {
+                title: 'Замок Монжене',
+                desc: 'Фотография. Замок Монжене, Симферопольский район, 1890-е гг.',
+                image: 'https://raw.githubusercontent.com/GloriaGestant/artwalk-hub.github.io/main/zamok-monzhene.jpg',
+                pos: [-roomWidth/2 + 0.12, 1.8, 0],
+                rotY: Math.PI/2,
+                w: 2.2,
+                h: 1.4
+            },
+            {
+                title: 'Имение Сартана',
+                desc: 'Фотография. Имение Сартана, Белогорский район, 19 в.',
+                image: 'https://raw.githubusercontent.com/GloriaGestant/artwalk-hub.github.io/main/imenie-sartana.jpg',
+                pos: [roomWidth/2 - 0.12, 1.8, -2],
+                rotY: -Math.PI/2,
+                w: 2.0,
+                h: 1.3
+            },
+            {
+                title: 'Усадьба генерала Хлебникова',
+                desc: 'Фотография. Усадьба царского генерала Константина Дмитриевича Хлебникова, Севастополь, 19 в.',
+                image: 'https://raw.githubusercontent.com/GloriaGestant/artwalk-hub.github.io/main/usadba-generala.jpg',
+                pos: [roomWidth/2 - 0.12, 1.8, 2],
+                rotY: -Math.PI/2,
+                w: 2.0,
+                h: 1.3
+            }
         ];
 
+
         const paintingMeshes = [];
-        const paintingPositions = [];
+        const textureLoader = new THREE.TextureLoader();
+
+        // Подгоняет текстуру под пропорции плоскости
+        function applyCoverFit(texture, planeW, planeH) {
+            const img = texture.image;
+            if (!img || !img.width || !img.height) return;
+            const imgAspect = img.width / img.height;
+            const planeAspect = planeW / planeH;
+            if (imgAspect > planeAspect) {
+                const scale = planeAspect / imgAspect;
+                texture.repeat.set(scale, 1);
+                texture.offset.set((1 - scale) / 2, 0);
+            } else {
+                const scale = imgAspect / planeAspect;
+                texture.repeat.set(1, scale);
+                texture.offset.set(0, (1 - scale) / 2);
+            }
+            texture.needsUpdate = true;
+        }
 
         paintingData.forEach((data) => {
-            const texture = createPaintingTexture(data.bg, data.fg, data.title);
             const paintingGroup = new THREE.Group();
 
             const paintingGeo = new THREE.PlaneGeometry(data.w, data.h);
             const paintingMat = new THREE.MeshStandardMaterial({
-                map: texture,
+                map: null,
                 roughness: 0.4,
                 metalness: 0.05,
                 emissive: new THREE.Color(0x221100),
@@ -557,11 +550,25 @@
             painting.castShadow = true;
             painting.receiveShadow = true;
             painting.userData = { title: data.title, desc: data.desc };
+
+            // Загружаем картинку из Base64
+            if (data.image && data.image.startsWith('data:image')) {
+                textureLoader.load(
+                    data.image,
+                    (texture) => {
+                        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+                        if (THREE.SRGBColorSpace) texture.colorSpace = THREE.SRGBColorSpace;
+                        applyCoverFit(texture, data.w, data.h);
+                        paintingMat.map = texture;
+                        paintingMat.needsUpdate = true;
+                    }
+                );
+            }
+
             paintingGroup.add(painting);
             paintingMeshes.push(painting);
-            paintingPositions.push(new THREE.Vector3(data.pos[0], data.pos[1], data.pos[2]));
 
-            const frameWidth = 0.1;
+            const frameWidth = 0.12;
             const frameDepth = 0.06;
             const frameMat = new THREE.MeshStandardMaterial({ color: 0xc0a050, roughness: 0.35, metalness: 0.8 });
 
@@ -590,7 +597,7 @@
             scene.add(paintingGroup);
         });
 
-        // --- ПЬЕДЕСТАЛЫ ПОД ДЕКОР ---
+        // --- ДЕКОР ---
         function createPedestal(x, z, color = 0x8a7a6a, height = 0.8, width = 0.4) {
             const pedMat = new THREE.MeshStandardMaterial({ color: color, roughness: 0.7, metalness: 0.1 });
             const group = new THREE.Group();
@@ -707,56 +714,46 @@
             return group;
         }
 
-        const pedBackLeftY = createPedestal(-1.25, -roomDepth/2 + 0.5, 0x8a7a6a, 0.8, 0.4);
-        createVase(-1.25, pedBackLeftY, -roomDepth/2 + 0.5, 0x8b4513, 0.5, 0.12);
+        // Пьедесталы и светильники
+        const pedBackLeftY = createPedestal(-4.5, -roomDepth/2 + 0.5, 0x8a7a6a, 0.8, 0.4);
+        createVase(-4.5, pedBackLeftY, -roomDepth/2 + 0.5, 0x8b4513, 0.5, 0.12);
 
-        const pedBackRightY = createPedestal(1.25, -roomDepth/2 + 0.5, 0x8a7a6a, 0.8, 0.4);
-        createVase(1.25, pedBackRightY, -roomDepth/2 + 0.5, 0x5a3a2a, 0.5, 0.12);
+        const pedBackRightY = createPedestal(4.5, -roomDepth/2 + 0.5, 0x8a7a6a, 0.8, 0.4);
+        createVase(4.5, pedBackRightY, -roomDepth/2 + 0.5, 0x5a3a2a, 0.5, 0.12);
 
         createWallSconce(-1.0, 2.8, -roomDepth/2 + 0.12, 0);
         createWallSconce(1.0, 2.8, -roomDepth/2 + 0.12, 0);
 
-        const pedRightAY = createPedestal(roomWidth/2 - 0.5, -1.75, 0x7a6a5a, 0.9, 0.4);
-        createVase(roomWidth/2 - 0.5, pedRightAY, -1.75, 0x6a5a4a, 0.55, 0.12);
+        const pedRightAY = createPedestal(roomWidth/2 - 0.5, -2.5, 0x7a6a5a, 0.9, 0.4);
+        createVase(roomWidth/2 - 0.5, pedRightAY, -2.5, 0x6a5a4a, 0.55, 0.12);
 
-        const pedRightBY = createPedestal(roomWidth/2 - 0.5, 0.75, 0x7a6a5a, 0.7, 0.4);
-        createVase(roomWidth/2 - 0.5, pedRightBY, 0.75, 0x4a3a2a, 0.45, 0.1);
+        const pedRightBY = createPedestal(roomWidth/2 - 0.5, 2.5, 0x7a6a5a, 0.7, 0.4);
+        createPlant(roomWidth/2 - 0.5, pedRightBY, 2.5, 0x7a4a2a);
 
-        const pedRightCY = createPedestal(roomWidth/2 - 0.5, 3.0, 0x7a6a5a, 0.6, 0.45);
-        createPlant(roomWidth/2 - 0.5, pedRightCY, 3.0, 0x7a4a2a);
+        const pedLeftAY = createPedestal(-roomWidth/2 + 0.5, -2.5, 0x7a6a5a, 0.8, 0.4);
+        createVase(-roomWidth/2 + 0.5, pedLeftAY, -2.5, 0x5a4a3a, 0.5, 0.12);
 
-        const pedLeftAY = createPedestal(-roomWidth/2 + 0.5, -1.75, 0x7a6a5a, 0.8, 0.4);
-        createVase(-roomWidth/2 + 0.5, pedLeftAY, -1.75, 0x5a4a3a, 0.5, 0.12);
+        const pedLeftBY = createPedestal(-roomWidth/2 + 0.5, 2.5, 0x7a6a5a, 0.65, 0.45);
+        createPlant(-roomWidth/2 + 0.5, pedLeftBY, 2.5, 0x6a3a2a);
 
-        const pedLeftBY = createPedestal(-roomWidth/2 + 0.5, 0.75, 0x7a6a5a, 0.65, 0.45);
-        createPlant(-roomWidth/2 + 0.5, pedLeftBY, 0.75, 0x6a3a2a);
+        const pedFrontLeftY = createPedestal(-3.5, roomDepth/2 - 0.5, 0x8a7a6a, 0.8, 0.4);
+        createVase(-3.5, pedFrontLeftY, roomDepth/2 - 0.5, 0x6a4a3a, 0.5, 0.12);
 
-        const pedLeftCY = createPedestal(-roomWidth/2 + 0.5, 3.0, 0x7a6a5a, 0.95, 0.4);
-        createVase(-roomWidth/2 + 0.5, pedLeftCY, 3.0, 0x8a6a4a, 0.6, 0.14);
-
-        const pedFrontLeftY = createPedestal(-1.25, roomDepth/2 - 0.5, 0x8a7a6a, 0.8, 0.4);
-        createVase(-1.25, pedFrontLeftY, roomDepth/2 - 0.5, 0x6a4a3a, 0.5, 0.12);
-
-        const pedFrontRightY = createPedestal(1.25, roomDepth/2 - 0.5, 0x8a7a6a, 0.8, 0.4);
-        createVase(1.25, pedFrontRightY, roomDepth/2 - 0.5, 0x4a3a2a, 0.5, 0.12);
+        const pedFrontRightY = createPedestal(3.5, roomDepth/2 - 0.5, 0x8a7a6a, 0.8, 0.4);
+        createVase(3.5, pedFrontRightY, roomDepth/2 - 0.5, 0x4a3a2a, 0.5, 0.12);
 
         // =====================================================================
-        // --- ДИВАН (с мягкой объемной спинкой) ---
+        // --- ДИВАН ---
         // =====================================================================
         function createSofa() {
             const group = new THREE.Group();
 
             const woodMat = new THREE.MeshStandardMaterial({ color: 0x4a2a0a, roughness: 0.6, metalness: 0.1 });
-            const goldMat = new THREE.MeshStandardMaterial({ 
-                color: 0xffd700, 
-                roughness: 0.2, 
-                metalness: 0.95 
-            });
+            const goldMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.2, metalness: 0.95 });
             const velvetMat = new THREE.MeshStandardMaterial({ color: 0x8b1a1a, roughness: 0.95, metalness: 0.0 });
             const redVelvetMat = new THREE.MeshStandardMaterial({ color: 0xa02020, roughness: 0.95, metalness: 0.0 });
             const darkVelvetMat = new THREE.MeshStandardMaterial({ color: 0x6b1010, roughness: 0.95 });
 
-            // Ножки
             const legPositions = [
                 [-1.0, 0, -0.35], [0, 0, -0.35], [1.0, 0, -0.35],
                 [-1.0, 0, 0.35], [0, 0, 0.35], [1.0, 0, 0.35]
@@ -769,81 +766,58 @@
                 group.add(leg);
             });
 
-            // Сиденье (каркас)
             const seatFrame = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.12, 0.95), woodMat);
             seatFrame.position.set(0, 0.42, 0);
             seatFrame.castShadow = true;
             seatFrame.receiveShadow = true;
             group.add(seatFrame);
 
-            // Обивка сиденья (чуть мягче, со скруглениями)
             const seatCushion = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.15, 0.85, 4, 2, 4), velvetMat);
             seatCushion.position.set(0, 0.52, 0);
             seatCushion.castShadow = true;
             seatCushion.receiveShadow = true;
             group.add(seatCushion);
 
-            // Золочёная окантовка сиденья
             const seatTrim = new THREE.Mesh(new THREE.BoxGeometry(2.62, 0.04, 0.97), goldMat);
             seatTrim.position.set(0, 0.36, 0);
             seatTrim.castShadow = true;
             group.add(seatTrim);
 
-            // --- МЯГКАЯ СПИНКА ---
-            // 1. Мягкая основа спинки (большая подушка)
-            const backCushion = new THREE.Mesh(
-                new THREE.BoxGeometry(2.6, 1.1, 0.15, 8, 8, 4), 
-                velvetMat
-            );
+            const backCushion = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.1, 0.15, 8, 8, 4), velvetMat);
             backCushion.position.set(0, 1.05, -0.38);
             backCushion.castShadow = true;
             backCushion.receiveShadow = true;
             group.add(backCushion);
 
-            // 2. Золочёная рама сзади (для жесткости)
             const backFrame = new THREE.Mesh(new THREE.BoxGeometry(2.62, 1.14, 0.06), goldMat);
             backFrame.position.set(0, 1.05, -0.46);
             backFrame.castShadow = true;
             backFrame.receiveShadow = true;
             group.add(backFrame);
 
-            // 3. Объемные овалы (капитоне) - мягкие вставки
             const ovalPositions = [-0.75, 0, 0.75];
             ovalPositions.forEach(xPos => {
-                // Мягкая выпуклая подушка внутри овала
-                const ovalCushion = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.28, 32, 16),
-                    redVelvetMat
-                );
+                const ovalCushion = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 16), redVelvetMat);
                 ovalCushion.scale.set(1, 1.3, 0.4);
                 ovalCushion.position.set(xPos, 1.05, -0.33);
                 ovalCushion.castShadow = true;
                 ovalCushion.receiveShadow = true;
                 group.add(ovalCushion);
 
-                // Золочёный валик (бублик), обрамляющий мягкую вставку
-                const ovalGold = new THREE.Mesh(
-                    new THREE.TorusGeometry(0.28, 0.045, 16, 32), 
-                    goldMat
-                );
+                const ovalGold = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.045, 16, 32), goldMat);
                 ovalGold.scale.set(1, 1.3, 1);
                 ovalGold.position.set(xPos, 1.05, -0.30);
                 ovalGold.castShadow = true;
                 group.add(ovalGold);
             });
 
-            // 4. Золотые вертикальные перемычки (разделяют мягкие секции)
             [-0.375, 0.375].forEach(xPos => {
-                const divider = new THREE.Mesh(
-                    new THREE.CylinderGeometry(0.025, 0.025, 1.05, 8),
-                    goldMat
-                );
+                const divider = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.05, 8), goldMat);
                 divider.position.set(xPos, 1.05, -0.36);
                 divider.castShadow = true;
                 group.add(divider);
             });
 
-            // 5. Дополнительная золочёная окантовка по краям спинки
             const topBackTrim = new THREE.Mesh(new THREE.BoxGeometry(2.64, 0.08, 0.12), goldMat);
             topBackTrim.position.set(0, 1.62, -0.4);
             topBackTrim.castShadow = true;
@@ -854,7 +828,6 @@
             bottomBackTrim.castShadow = true;
             group.add(bottomBackTrim);
 
-            // Подлокотники (изгиб наружу)
             [-1.3, 1.3].forEach((xPos, index) => {
                 const armGroup = new THREE.Group();
 
@@ -869,7 +842,6 @@
                 armCurve.castShadow = true;
                 armGroup.add(armCurve);
 
-                // Мягкий валик на подлокотнике
                 const armPad = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 0.3, 8), darkVelvetMat);
                 armPad.position.set(0, 1.1, 0.15);
                 armPad.rotation.z = index === 0 ? 0.4 : -0.4;
@@ -880,7 +852,6 @@
                 group.add(armGroup);
             });
 
-            // Боковые стойки (тоже золотые)
             [-1.27, 1.27].forEach(xPos => {
                 const sidePost = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.15, 0.1), goldMat);
                 sidePost.position.set(xPos, 1.05, -0.4);
@@ -891,18 +862,16 @@
             return group;
         }
 
-        // Первый диван: смотрит на переднюю стену (спинка к задней)
         const sofa1 = createSofa();
         sofa1.position.set(0, 0, -0.5);
         sofa1.rotation.y = Math.PI;
         scene.add(sofa1);
 
-        // Второй диван: смотрит на заднюю стену (спинка к передней)
         const sofa2 = createSofa();
         sofa2.position.set(0, 0, 0.5);
         scene.add(sofa2);
 
-        // --- ПАРАМЕТРЫ СИДЕНИЯ ---
+        // --- СИДЕНИЕ ---
         const SIT_POSITION_1 = new THREE.Vector3(0, 1.3, -0.5 + 0.1);
         const STAND_POSITION_1 = new THREE.Vector3(0, 1.6, -0.5 - 1.6);
         const LOOK_TARGET_1 = new THREE.Vector3(0, 2.0, roomDepth/2 - 0.5);
@@ -987,20 +956,16 @@
             }
         });
 
-        // --- Управление движением ---
+        // --- ДВИЖЕНИЕ ---
         const moveSpeed = 0.12;
         const keys = { w: false, a: false, s: false, d: false };
 
         window.addEventListener('keydown', (e) => {
             if (e.code === 'KeyE') {
                 e.preventDefault();
-                if (isSitting) {
-                    standUp();
-                } else if (nearSofa1) {
-                    sitOnSofa('sofa1');
-                } else if (nearSofa2) {
-                    sitOnSofa('sofa2');
-                }
+                if (isSitting) standUp();
+                else if (nearSofa1) sitOnSofa('sofa1');
+                else if (nearSofa2) sitOnSofa('sofa2');
                 return;
             }
 
@@ -1023,7 +988,6 @@
             }
         });
 
-        // Мобильные кнопки
         const btnForward = document.getElementById('btn-forward');
         const btnBack = document.getElementById('btn-back');
         const btnLeft = document.getElementById('btn-left');
@@ -1032,18 +996,10 @@
         const mobileKeys = { forward: false, back: false, left: false, right: false };
 
         function bindMobileButton(btn, key) {
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                mobileKeys[key] = true;
-                if (isSitting) standUp();
-            });
+            btn.addEventListener('touchstart', (e) => { e.preventDefault(); mobileKeys[key] = true; if (isSitting) standUp(); });
             btn.addEventListener('touchend', (e) => { e.preventDefault(); mobileKeys[key] = false; });
             btn.addEventListener('touchcancel', (e) => { e.preventDefault(); mobileKeys[key] = false; });
-            btn.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-                mobileKeys[key] = true;
-                if (isSitting) standUp();
-            });
+            btn.addEventListener('mousedown', (e) => { e.preventDefault(); mobileKeys[key] = true; if (isSitting) standUp(); });
             btn.addEventListener('mouseup', (e) => { e.preventDefault(); mobileKeys[key] = false; });
             btn.addEventListener('mouseleave', () => { mobileKeys[key] = false; });
         }
@@ -1053,11 +1009,10 @@
         bindMobileButton(btnLeft, 'left');
         bindMobileButton(btnRight, 'right');
 
-        // --- Raycaster для кликов по картинам ---
+        // --- КЛИКИ ---
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
-
-        const MAX_INTERACTION_DISTANCE = 3.5;
+        const MAX_INTERACTION_DISTANCE = 4.5;
 
         function handleInteraction(clientX, clientY) {
             const rect = renderer.domElement.getBoundingClientRect();
@@ -1065,13 +1020,11 @@
             mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
-
             const intersects = raycaster.intersectObjects(paintingMeshes);
 
             if (intersects.length > 0) {
                 const hit = intersects[0].object;
                 const hitPoint = intersects[0].point;
-
                 const distance = camera.position.distanceTo(hitPoint);
 
                 if (distance <= MAX_INTERACTION_DISTANCE) {
@@ -1084,12 +1037,11 @@
             }
         }
 
-        // --- Тап/клик по холсту (работает и на десктопе, и на мобильных) ---
         let pointerDownTime = 0;
         let pointerDownX = 0;
         let pointerDownY = 0;
-        const TAP_MAX_DURATION = 300;   // мс
-        const TAP_MAX_MOVE = 10;        // пикселей
+        const TAP_MAX_DURATION = 300;
+        const TAP_MAX_MOVE = 10;
 
         renderer.domElement.addEventListener('pointerdown', (e) => {
             if (e.isPrimary === false) return;
@@ -1110,7 +1062,6 @@
             }
         });
 
-        // --- Панель информации ---
         const infoPanel = document.getElementById('info-panel');
         const infoTitle = document.getElementById('info-title');
         const infoDesc = document.getElementById('info-desc');
@@ -1126,7 +1077,7 @@
             infoPanel.classList.remove('visible');
         });
 
-        // --- Анимация и движение ---
+        // --- ЦИКЛ АНИМАЦИИ ---
         const boundX = roomWidth/2 - 0.8;
         const boundZ = roomDepth/2 - 0.8;
         const SOFA_AVOID_RADIUS = 1.8;
@@ -1162,7 +1113,6 @@
 
             if (!isSitting && !isReturning) {
                 const moveDirection = new THREE.Vector3();
-
                 const forward = new THREE.Vector3();
                 camera.getWorldDirection(forward);
                 forward.y = 0;
@@ -1181,7 +1131,6 @@
                     moveDirection.multiplyScalar(moveSpeed);
 
                     let newPos = camera.position.clone().add(moveDirection);
-
                     newPos.x = Math.max(-boundX, Math.min(boundX, newPos.x));
                     newPos.z = Math.max(-boundZ, Math.min(boundZ, newPos.z));
 
@@ -1229,7 +1178,6 @@
 
         animate();
 
-        // --- Обработка изменения размера окна ---
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
