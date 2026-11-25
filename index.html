@@ -463,7 +463,7 @@
         scene.add(skRight);
 
         // ==========================================
-        // --- КАРТИНЫ (ВСТАВЬТЕ СЮДА ВАШИ BASE64 СТРОКИ) ---
+        // --- КАРТИНЫ ---
         // ==========================================
         const paintingData = [
             {
@@ -551,8 +551,9 @@
             painting.receiveShadow = true;
             painting.userData = { title: data.title, desc: data.desc };
 
-            // Загружаем картинку из Base64
-            if (data.image && data.image.startsWith('data:image')) {
+            // ИСПРАВЛЕНО: убрана проверка startsWith('data:image') —
+            // теперь грузятся и обычные URL, и Base64
+            if (data.image) {
                 textureLoader.load(
                     data.image,
                     (texture) => {
@@ -561,6 +562,10 @@
                         applyCoverFit(texture, data.w, data.h);
                         paintingMat.map = texture;
                         paintingMat.needsUpdate = true;
+                    },
+                    undefined,
+                    (err) => {
+                        console.error('Ошибка загрузки картинки:', data.image, err);
                     }
                 );
             }
